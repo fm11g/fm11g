@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>카피라이팅 연습</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+        .floating-menu {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background-color: #333;
+            color: white;
+            padding: 15px;
+            z-index: 1000;
+            text-align: center;
+        }
+        .section {
+            margin-top: 100px; /* 플로팅 메뉴 공간 확보 */
+            margin-bottom: 30px;
+        }
+        h2 {
+            color: #333;
+        }
+        .timer {
+            font-size: 24px;
+            font-weight: bold;
+            color: red;
+            margin: 10px 0;
+        }
+        textarea {
+            width: 100%;
+            height: 150px;
+            margin-top: 10px;
+            padding: 10px;
+            font-size: 16px;
+        }
+        button {
+            padding: 10px;
+            font-size: 16px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        .checklist-container {
+            margin-top: 10px;
+        }
+        .checklist-container input {
+            margin-right: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="floating-menu">
+        <span><strong>고객 타겟:</strong> <span id="customerTargetDisplay">[여기에 고객 타겟을 입력하세요]</span></span><br><br>
+        <span><strong>상품의 특장점:</strong> <span id="productFeatureDisplay">[여기에 상품의 특장점을 입력하세요]</span></span><br>
+        <span><strong>핵심 키워드:</strong> <span id="keywordsDisplay">[여기에 키워드를 입력하세요]</span></span>
+    </div>
+
+    <div class="section">
+        <h2>고객 타겟과 상품 특장점 입력</h2>
+        <label for="customerTarget">고객 타겟:</label>
+        <input type="text" id="customerTarget" placeholder="고객 타겟을 입력하세요" oninput="updateFloatingMenu()"><br><br>
+        
+        <label for="productFeature">상품 특장점:</label>
+        <input type="text" id="productFeature" placeholder="상품의 특장점을 입력하세요" oninput="updateFloatingMenu()"><br><br>
+
+        <div class="keywords-container">
+            <label for="keyword1">핵심 키워드 1:</label>
+            <input type="text" id="keyword1" placeholder="키워드를 입력하세요" oninput="updateFloatingMenu()"><br><br>
+
+            <label for="keyword2">핵심 키워드 2:</label>
+            <input type="text" id="keyword2" placeholder="키워드를 입력하세요" oninput="updateFloatingMenu()"><br><br>
+
+            <label for="keyword3">핵심 키워드 3:</label>
+            <input type="text" id="keyword3" placeholder="키워드를 입력하세요" oninput="updateFloatingMenu()">
+        </div>
+    </div>
+
+
+    <h1>카피라이팅 연습</h1>
+
+    <!-- 섹션 1 ~ 4 (예시) -->
+    <div class="section">
+        <h2>1. 헤드라인: 주목을 끌기 (AIDA - Attention, SPIN - Situation)</h2>
+        <p>고객이 이 제목을 읽고 무엇을 느낄 것인가? 이 제목이 고객의 미친듯한 현재 상황을 어떻게 반영할 수 있을까?</p>
+        <div class="timer" id="timer1">10:00</div>
+        <textarea id="section1" placeholder="여기에 카피를 작성하세요..."></textarea>
+        <button onclick="startTimer('timer1', 'section1')">타이머 시작</button>
+        <div class="checklist-container" id="checklist1">
+            <h3>체크리스트:</h3>
+            <ul>
+                <li><input type="checkbox"> 고객의 관심을 끄는 요소가 있는가?</li>
+                <li><input type="checkbox"> 긴급성을 강조하는가?</li>
+                <li><input type="checkbox"> 문제와 관련된 고객의 상황을 잘 표현했는가?</li>
+                <li><input type="checkbox"> 간결하고 임팩트 있는 표현을 사용했는가?</li>
+            </ul>
+            <input type="text" id="newChecklistItem1" placeholder="새 항목을 추가하려면 입력하세요">
+            <button onclick="addChecklistItem(1)">항목 추가</button>
+        </div>
+    </div>
+
+    <div class="section">
+        <h2>2. 관심 끌기 (AIDA - Interest, SPIN - Problem)</h2>
+        <p>고객이 제품에 관심을 가질 수 있도록 유도하려면, 어떻게 표현할 수 있을까요?</p>
+        <div class="timer" id="timer2">10:00</div>
+        <textarea id="section2" placeholder="여기에 카피를 작성하세요..."></textarea>
+        <button onclick="startTimer('timer2', 'section2')">타이머 시작</button>
+        <div class="checklist-container" id="checklist2">
+            <h3>체크리스트:</h3>
+            <ul>
+                <li><input type="checkbox"> 고객이 관심을 가질 수 있도록 끌어들였는가?</li>
+                <li><input type="checkbox"> 고객의 문제를 해결하는 방법을 제시했는가?</li>
+                <li><input type="checkbox"> 장점과 특성을 구체적으로 설명했는가?</li>
+                <li><input type="checkbox"> 가독성이 좋고 눈에 띄는가?</li>
+            </ul>
+            <input type="text" id="newChecklistItem2" placeholder="새 항목을 추가하려면 입력하세요">
+            <button onclick="addChecklistItem(2)">항목 추가</button>
+        </div>
+    </div>
+
+    <div class="section">
+        <h2>3. 욕구 불러일으키기 (AIDA - Desire, SPIN - Implication)</h2>
+        <p>고객이 제품에 대한 욕구를 느낄 수 있도록 자극하는 방법은 무엇일까요?</p>
+        <div class="timer" id="timer3">10:00</div>
+        <textarea id="section3" placeholder="여기에 카피를 작성하세요..."></textarea>
+        <button onclick="startTimer('timer3', 'section3')">타이머 시작</button>
+        <div class="checklist-container" id="checklist3">
+            <h3>체크리스트:</h3>
+            <ul>
+                <li><input type="checkbox"> 고객의 욕구를 자극할 수 있는 요소가 있는가?</li>
+                <li><input type="checkbox"> 감정적 연결을 유도하는가?</li>
+                <li><input type="checkbox"> 제품을 사용하면 어떤 변화가 일어날지 구체적으로 제시했는가?</li>
+                <li><input type="checkbox"> 고객이 느낄 수 있는 직접적인 이점을 표현했는가?</li>
+            </ul>
+            <input type="text" id="newChecklistItem3" placeholder="새 항목을 추가하려면 입력하세요">
+            <button onclick="addChecklistItem(3)">항목 추가</button>
+        </div>
+    </div>
+
+    <div class="section">
+        <h2>4. 행동 유도 (AIDA - Action, SPIN - Need-Payoff)</h2>
+        <p>고객이 바로 행동을 취할 수 있도록 유도하는 문구를 작성하려면 어떻게 해야 할까요?</p>
+        <div class="timer" id="timer4">10:00</div>
+        <textarea id="section4" placeholder="여기에 카피를 작성하세요..."></textarea>
+        <button onclick="startTimer('timer4', 'section4')">타이머 시작</button>
+        <div class="checklist-container" id="checklist4">
+            <h3>체크리스트:</h3>
+            <ul>
+                <li><input type="checkbox"> 행동을 유도할 수 있는 명확한 요청이 있는가?</li>
+                <li><input type="checkbox"> 긴급성을 강조하는가?</li>
+                <li><input type="checkbox"> 고객이 즉시 행동할 수 있도록 간편한 방법을 제시했는가?</li>
+                <li><input type="checkbox"> 한 번의 클릭으로 행동을 취할 수 있게 했는가?</li>
+            </ul>
+            <input type="text" id="newChecklistItem4" placeholder="새 항목을 추가하려면 입력하세요">
+            <button onclick="addChecklistItem(4)">항목 추가</button>
+        </div>
+    </div>
+
+    <!-- 섹션 5 ~ 15 -->
+    <div class="section">
+        <h2>5. 고객의 문제 인식 (AIDA - Desire, SPIN - Problem)</h2>
+        <p>고객이 겪고 있는 문제를 어떻게 효과적으로 강조할 수 있을까요?</p>
+        <div class="timer" id="timer5">10:00</div>
+        <textarea id="section5" placeholder="여기에 카피를 작성하세요..."></textarea>
+        <button onclick="startTimer('timer5', 'section5')">타이머 시작</button>
+        <div class="checklist-container" id="checklist5">
+            <h3>체크리스트:</h3>
+            <ul>
+                <li><input type="checkbox"> 고객의 문제를 구체적으로 설명했는가?</li>
+                <li><input type="checkbox"> 고객의 현재 상황을 잘 묘사했는가?</li>
+                <li><input type="checkbox"> 고객의 문제를 해결하려는 의지가 보였는가?</li>
+                <li><input type="checkbox"> 고객이 공감할 수 있는 언어를 사용했는가?</li>
+            </ul>
+            <input type="text" id="newChecklistItem5" placeholder="새 항목을 추가하려면 입력하세요">
+            <button onclick="addChecklistItem(5)">항목 추가</button>
+        </div>
+    </div>
+
+    <div class="section">
+        <h2>6. 제품/서비스 소개 (AIDA - Interest, SPIN - Situation)</h2>
+        <p>고객의 상황을 이해하고 제품을 소개하는 문구를 작성하려면?</p>
+        <div class="timer" id="timer6">10:00</div>
+        <textarea id="section6" placeholder="여기에 카피를 작성하세요..."></textarea>
+        <button onclick="startTimer('timer6', 'section6')">타이머 시작</button>
+        <div class="checklist-container" id="checklist6">
+            <h3>체크리스트:</h3>
+            <ul>
+                <li><input type="checkbox"> 고객의 상황에 맞춘 솔루션을 제시했는가?</li>
+                <li><input type="checkbox"> 제품의 특성을 잘 설명했는가?</li>
+                <li><input type="checkbox"> 제품이 고객에게 어떤 가치를 제공할지 설명했는가?</li>
+                <li><input type="checkbox"> 고객이 제품을 어떻게 사용할 수 있는지 구체적으로 알려줬는가?</li>
+            </ul>
+            <input type="text" id="newChecklistItem6" placeholder="새 항목을 추가하려면 입력하세요">
+            <button onclick="addChecklistItem(6)">항목 추가</button>
+        </div>
+    </div>
+
+    <div class="section">
+        <h2>7. 제품의 특장점 강조 (AIDA - Desire, SPIN - Need-Payoff)</h2>
+        <p>제품의 주요 특장점을 부각시키는 문구를 작성하려면 어떻게 해야 할까요?</p>
+        <div class="timer" id="timer7">10:00</div>
+        <textarea id="section7" placeholder="여기에 카피를 작성하세요..."></textarea>
+        <button onclick="startTimer('timer7', 'section7')">타이머 시작</button>
+        <div class="checklist-container" id="checklist7">
+            <h3>체크리스트:</h3>
+            <ul>
+                <li><input type="checkbox"> 제품의 특장점을 명확히 설명했는가?</li>
+                <li><input type="checkbox"> 고객이 필요로 하는 주요 기능을 강조했는가?</li>
+                <li><input type="checkbox"> 경쟁 제품과의 차별성을 강조했는가?</li>
+                <li><input type="checkbox"> 구체적이고 실용적인 예시를 제시했는가?</li>
+            </ul>
+            <input type="text" id="newChecklistItem7" placeholder="새 항목을 추가하려면 입력하세요">
+            <button onclick="addChecklistItem(7)">항목 추가</button>
+        </div>
+    </div>
+
+    <div class="section">
+        <h2>8. 고객 후기 강조 (SPIN - Implication)</h2>
+        <p>고객 후기나 사례를 통해 제품의 효과를 강조하는 방법은?</p>
+        <div class="timer" id="timer8">10:00</div>
+        <textarea id="section8" placeholder="여기에 카피를 작성하세요..."></textarea>
+        <button onclick="startTimer('timer8', 'section8')">타이머 시작</button>
+        <div class="checklist-container" id="checklist8">
+            <h3>체크리스트:</h3>
+            <ul>
+                <li><input type="checkbox"> 고객 후기를 신뢰성 있게 제시했는가?</li>
+                <li><input type="checkbox"> 구체적이고 실질적인 후기를 제시했는가?</li>
+                <li><input type="checkbox"> 후기에서 강조할 핵심적인 요소가 있는가?</li>
+                <li><input type="checkbox"> 고객이 후기에서 어떤 가치를 얻었는지 명확히 나타냈는가?</li>
+            </ul>
+            <input type="text" id="newChecklistItem8" placeholder="새 항목을 추가하려면 입력하세요">
+            <button onclick="addChecklistItem(8)">항목 추가</button>
+        </div>
+    </div>
+
+    <div class="section">
+        <h2>9. 혜택 강조 (AIDA - Desire)</h2>
+        <p>고객이 혜택을 바로 이해하고 느낄 수 있도록 하는 문구를 작성하는 방법은?</p>
+        <div class="timer" id="timer9">10:00</div>
+        <textarea id="section9" placeholder="여기에 카피를 작성하세요..."></textarea>
+        <button onclick="startTimer('timer9', 'section9')">타이머 시작</button>
+        <div class="checklist-container" id="checklist9">
+            <h3>체크리스트:</h3>
+            <ul>
+                <li><input type="checkbox"> 혜택을 구체적으로 제시했는가?</li>
+                <li><input type="checkbox"> 고객이 즉시 혜택을 느낄 수 있도록 했는가?</li>
+                <li><input type="checkbox"> 혜택이 고객의 욕구를 충족시킬 수 있도록 연결했는가?</li>
+                <li><input type="checkbox"> 혜택이 강조되도록 디자인했는가?</li>
+            </ul>
+            <input type="text" id="newChecklistItem9" placeholder="새 항목을 추가하려면 입력하세요">
+            <button onclick="addChecklistItem(9)">항목 추가</button>
+        </div>
+    </div>
+
+    <div class="section">
+        <h2>10. 긴급성 강조 (AIDA - Action)</h2>
+        <p>구매를 유도하기 위해 고객에게 긴급성을 강조하는 방법은?</p>
+        <div class="timer" id="timer10">10:00</div>
+        <textarea id="section10" placeholder="여기에 카피를 작성하세요..."></textarea>
+        <button onclick="startTimer('timer10', 'section10')">타이머 시작</button>
+        <div class="checklist-container" id="checklist10">
+            <h3>체크리스트:</h3>
+            <ul>
+                <li><input type="checkbox"> 한정된 시간이나 수량을 강조했는가?</li>
+                <li><input type="checkbox"> 즉각적인 결정을 유도하는가?</li>
+                <li><input type="checkbox"> 긴급성을 시각적으로 강조했는가?</li>
+                <li><input type="checkbox"> 고객이 행동을 취하도록 만들 수 있는 문구가 있는가?</li>
+            </ul>
+            <input type="text" id="newChecklistItem10" placeholder="새 항목을 추가하려면 입력하세요">
+            <button onclick="addChecklistItem(10)">항목 추가</button>
+        </div>
+    </div>
+
+    <div class="section">
+        <h2>11. 보증 및 리스크 제거 (SPIN - Need-Payoff)</h2>
+        <p>고객이 제품에 대해 걱정하지 않도록 보증을 제공하는 방법은?</p>
+        <div class="timer" id="timer11">10:00</div>
+        <textarea id="section11" placeholder="여기에 카피를 작성하세요..."></textarea>
+        <button onclick="startTimer('timer11', 'section11')">타이머 시작</button>
+        <div class="checklist-container" id="checklist11">
+            <h3>체크리스트:</h3>
+            <ul>
+                <li><input type="checkbox"> 제품에 대한 보증을 제공했는가?</li>
+                <li><input type="checkbox"> 고객이 리스크를 제거하는 방안을 제시했는가?</li>
+                <li><input type="checkbox"> 고객이 느낄 수 있는 안심 요소를 강조했는가?</li>
+                <li><input type="checkbox"> 리스크 제거를 확실히 보여주는 문구가 있는가?</li>
+            </ul>
+            <input type="text" id="newChecklistItem11" placeholder="새 항목을 추가하려면 입력하세요">
+            <button onclick="addChecklistItem(11)">항목 추가</button>
+        </div>
+    </div>
+
+    <div class="section">
+        <h2>12. 사회적 증거 제공 (AIDA - Desire, SPIN - Situation)</h2>
+        <p>다른 사람들이 어떻게 사용하고 있는지 보여주는 방법은?</p>
+        <div class="timer" id="timer12">10:00</div>
+        <textarea id="section12" placeholder="여기에 카피를 작성하세요..."></textarea>
+        <button onclick="startTimer('timer12', 'section12')">타이머 시작</button>
+        <div class="checklist-container" id="checklist12">
+            <h3>체크리스트:</h3>
+            <ul>
+                <li><input type="checkbox"> 사회적 증거를 제시했는가?</li>
+                <li><input type="checkbox"> 다른 사람들의 성공적인 사례를 보여줬는가?</li>
+                <li><input type="checkbox"> 고객이 실제로 사용할 수 있다는 느낌을 줬는가?</li>
+                <li><input type="checkbox"> 사회적 증거가 고객의 결정에 영향을 미쳤는가?</li>
+            </ul>
+            <input type="text" id="newChecklistItem12" placeholder="새 항목을 추가하려면 입력하세요">
+            <button onclick="addChecklistItem(12)">항목 추가</button>
+        </div>
+    </div>
+
+    <div class="section">
+        <h2>13. 가격 제시 (SPIN - Need-Payoff)</h2>
+        <p>고객이 가격을 보고 구매 결정을 내리도록 유도하는 방법은?</p>
+        <div class="timer" id="timer13">10:00</div>
+        <textarea id="section13" placeholder="여기에 카피를 작성하세요..."></textarea>
+        <button onclick="startTimer('timer13', 'section13')">타이머 시작</button>
+        <div class="checklist-container" id="checklist13">
+            <h3>체크리스트:</h3>
+            <ul>
+                <li><input type="checkbox"> 가격을 명확히 제시했는가?</li>
+                <li><input type="checkbox"> 가격과 혜택을 연결지었는가?</li>
+                <li><input type="checkbox"> 고객이 가성비를 느낄 수 있도록 제시했는가?</li>
+                <li><input type="checkbox"> 가격이 경쟁력 있음을 강조했는가?</li>
+            </ul>
+            <input type="text" id="newChecklistItem13" placeholder="새 항목을 추가하려면 입력하세요">
+            <button onclick="addChecklistItem(13)">항목 추가</button>
+        </div>
+    </div>
+
+    <div class="section">
+        <h2>14. 클로징 (AIDA - Action)</h2>
+        <p>고객에게 결정을 내리도록 유도하는 강력한 문구를 작성하는 방법은?</p>
+        <div class="timer" id="timer14">10:00</div>
+        <textarea id="section14" placeholder="여기에 카피를 작성하세요..."></textarea>
+        <button onclick="startTimer('timer14', 'section14')">타이머 시작</button>
+        <div class="checklist-container" id="checklist14">
+            <h3>체크리스트:</h3>
+            <ul>
+                <li><input type="checkbox"> 명확한 행동 요청이 있는가?</li>
+                <li><input type="checkbox"> 고객이 즉시 행동할 수 있도록 유도하는가?</li>
+                <li><input type="checkbox"> 고객이 결정을 내리기 쉽게 만들었는가?</li>
+                <li><input type="checkbox"> 긴급성을 추가했는가?</li>
+            </ul>
+            <input type="text" id="newChecklistItem14" placeholder="새 항목을 추가하려면 입력하세요">
+            <button onclick="addChecklistItem(14)">항목 추가</button>
+        </div>
+    </div>
+
+    <div class="section">
+        <h2>15. 최종 검토 및 개선</h2>
+        <p>완성된 카피를 검토하고 개선할 부분이 있는지 점검하세요.</p>
+        <div class="timer" id="timer15">10:00</div>
+        <textarea id="section15" placeholder="여기에 카피를 작성하세요..."></textarea>
+        <button onclick="startTimer('timer15', 'section15')">타이머 시작</button>
+        <div class="checklist-container" id="checklist15">
+            <h3>체크리스트:</h3>
+            <ul>
+                <li><input type="checkbox"> 모든 목표를 충족했는가?</li>
+                <li><input type="checkbox"> 문구가 명확하고 간결한가?</li>
+                <li><input type="checkbox"> 고객의 문제와 욕구를 해결했는가?</li>
+                <li><input type="checkbox"> 카피가 행동을 유도하는가?</li>
+            </ul>
+            <input type="text" id="newChecklistItem15" placeholder="새 항목을 추가하려면 입력하세요">
+            <button onclick="addChecklistItem(15)">항목 추가</button>
+        </div>
+    </div>
+
+    <script>
+
+  // 체크리스트 항목 추가
+function addChecklistItem(sectionNumber) {
+    const newItemText = document.getElementById(`newChecklistItem${sectionNumber}`).value;
+    if (newItemText) {
+        const newItem = document.createElement('li');
+        newItem.innerHTML = `<input type="checkbox"> ${newItemText}`;
+        document.getElementById(`checklist${sectionNumber}`).querySelector('ul').appendChild(newItem);
+        document.getElementById(`newChecklistItem${sectionNumber}`).value = '';
+    }
+}
+
+// 타이머 함수
+function startTimer(timerId, sectionId) {
+    let timerElement = document.getElementById(timerId);
+    let timeLeft = 600; // 10분 (600초)
+
+    const interval = setInterval(function() {
+        let minutes = Math.floor(timeLeft / 60);
+        let seconds = timeLeft % 60;
+        timerElement.innerText = `${minutes}:${seconds < 10 ? '0' + seconds : seconds}`;
+        timeLeft--;
+
+        if (timeLeft < 0) {
+            clearInterval(interval);
+            alert(`섹션 ${sectionId} 시간이 끝났습니다.`);
+        }
+    }, 1000);
+}
+
+function updateFloatingMenu() {
+    // Update customer target
+    const customerTarget = document.getElementById("customerTarget").value;
+    document.getElementById("customerTargetDisplay").innerText = customerTarget || "[여기에 고객 타겟을 입력하세요]";
+
+    // Update product feature
+    const productFeature = document.getElementById("productFeature").value;
+    document.getElementById("productFeatureDisplay").innerText = productFeature || "[여기에 상품의 특장점을 입력하세요]";
+
+    // Update keywords
+    const keyword1 = document.getElementById("keyword1").value;
+    const keyword2 = document.getElementById("keyword2").value;
+    const keyword3 = document.getElementById("keyword3").value;
+    const keywords = [keyword1, keyword2, keyword3].filter(Boolean).join(", ");
+    document.getElementById("keywordsDisplay").innerText = keywords || "[여기에 키워드를 입력하세요]";
+
+    // Save keyword values to localStorage
+    localStorage.setItem("keyword1", keyword1);
+    localStorage.setItem("keyword2", keyword2);
+    localStorage.setItem("keyword3", keyword3);
+}
+
+// Load values from localStorage on page load
+window.onload = function() {
+    const savedCustomerTarget = localStorage.getItem("customerTarget");
+    const savedProductFeature = localStorage.getItem("productFeature");
+
+    if (savedCustomerTarget) {
+        document.getElementById("customerTarget").value = savedCustomerTarget;
+        document.getElementById("customerTargetDisplay").innerText = savedCustomerTarget;
+    }
+
+    if (savedProductFeature) {
+        document.getElementById("productFeature").value = savedProductFeature;
+        document.getElementById("productFeatureDisplay").innerText = savedProductFeature;
+    }
+
+    // Restore keyword values from localStorage
+    const savedKeyword1 = localStorage.getItem("keyword1");
+    const savedKeyword2 = localStorage.getItem("keyword2");
+    const savedKeyword3 = localStorage.getItem("keyword3");
+
+    if (savedKeyword1) {
+        document.getElementById("keyword1").value = savedKeyword1;
+    }
+    if (savedKeyword2) {
+        document.getElementById("keyword2").value = savedKeyword2;
+    }
+    if (savedKeyword3) {
+        document.getElementById("keyword3").value = savedKeyword3;
+    }
+
+    updateFloatingMenu(); // Update the floating menu with loaded values
+
+    // Restore checklist states
+    for (let section = 1; section <= 15; section++) {
+        restoreChecklistState(section);
+    }
+}
+
+// 데이터 복구 함수
+function restoreData() {
+    // 고객 타겟과 특장점 복구
+    const savedCustomerTarget = localStorage.getItem('customerTarget');
+    const savedProductFeature = localStorage.getItem('productFeature');
+    if (savedCustomerTarget) document.getElementById('customerTarget').value = savedCustomerTarget;
+    if (savedProductFeature) document.getElementById('productFeature').value = savedProductFeature;
+    updateFloatingMenu();
+
+    // 키워드 복구
+    const savedKeyword1 = localStorage.getItem('keyword1');
+    const savedKeyword2 = localStorage.getItem('keyword2');
+    const savedKeyword3 = localStorage.getItem('keyword3');
+    if (savedKeyword1) document.getElementById('keyword1').value = savedKeyword1;
+    if (savedKeyword2) document.getElementById('keyword2').value = savedKeyword2;
+    if (savedKeyword3) document.getElementById('keyword3').value = savedKeyword3;
+
+    // 각 섹션의 텍스트 영역 데이터 복구
+    for (let i = 1; i <= 15; i++) {
+        const savedText = localStorage.getItem(`section${i}`);
+        if (savedText) document.getElementById(`section${i}`).value = savedText;
+    }
+}
+
+// 텍스트 변경 시 데이터 저장 함수
+function saveSectionData(sectionId) {
+    const text = document.getElementById(sectionId).value;
+    localStorage.setItem(sectionId, text);
+}
+
+// 타이머 시작 및 업데이트 함수
+function startTimer(timerId, textareaId) {
+    let timeLeft = 600; // 10분 = 600초
+    const timerElement = document.getElementById(timerId);
+    const textarea = document.getElementById(textareaId);
+    const interval = setInterval(function() {
+        const minutes = Math.floor(timeLeft / 60);
+        const seconds = timeLeft % 60;
+        timerElement.textContent = `${minutes}:${seconds < 10 ? '0' + seconds : seconds}`;
+        timeLeft--;
+
+        // 타이머 종료 후
+        if (timeLeft < 0) {
+            clearInterval(interval);
+            textarea.disabled = true;
+            alert('시간이 끝났습니다! 카피라이팅을 제출하세요.');
+        }
+    }, 1000);
+}
+
+// 페이지가 로드될 때 데이터 복구
+window.onload = restoreData;
+
+// 각 텍스트 영역에 입력 이벤트 리스너 추가
+document.addEventListener("DOMContentLoaded", function() {
+    for (let i = 1; i <= 15; i++) {
+        const textarea = document.getElementById(`section${i}`);
+        textarea.addEventListener('input', () => saveSectionData(`section${i}`));
+    }
+
+    // 체크리스트 상태를 저장하는 이벤트 리스너 추가
+    for (let section = 1; section <= 15; section++) {
+        const checklist = document.getElementById(`checklist${section}`);
+        checklist.addEventListener('change', () => saveChecklistState(section));
+    }
+});
+    </script>
+    
+</body>
+</html>

@@ -1,0 +1,643 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>일과 관리 간트차트</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            padding: 8px;
+            border: 1px solid #ddd;
+            text-align: center;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        input[type="text"], select {
+            width: 100%;
+            padding: 4px;
+            box-sizing: border-box;
+        }
+        .status-complete {
+            background-color: #c3e6cb;
+        }
+        .status-in-progress {
+            background-color: #ffeeba;
+        }
+        .status-not-started {
+            background-color: #f5c6cb;
+        }
+        .timer {
+            font-weight: bold;
+        }
+        .time-control-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+        }
+        .floating-mission-list {
+            position: fixed;
+            right: 20px;
+            bottom: 20px;
+            width: 200px;
+            padding: 15px;
+            background-color: #f2f2f2;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+        .floating-mission-list h3 {
+            margin-top: 0;
+            font-size: 1.1em;
+        }
+        .floating-mission-list p {
+            margin: 5px 0;
+            font-weight: bold;
+        }
+        .completed-mission {
+            text-decoration: line-through;
+            color: gray;
+        }
+        .mission-input {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        .mission-input input[type="checkbox"] {
+            margin-right: 10px;
+        }
+
+        /* 상태별 색상 */
+.status-complete {
+    background-color: #c3e6cb; /* 완료 - 초록색 */
+}
+.status-in-progress {
+    background-color: #ffeeba; /* 진행 중 - 노란색 */
+}
+.status-not-started {
+    background-color: #f5c6cb; /* 미완료 - 빨간색 */
+}
+
+ /* 드래그 기능 */
+ tr {
+            cursor: move;
+        }
+
+        .crossed-out {
+    text-decoration: line-through;
+}
+
+
+    </style>
+</head>
+<body>
+
+<h1>일과 관리 간트차트</h1>
+
+
+<!-- 오늘의 미션 입력란 -->
+<div>
+    <h4>오늘의 미션 1</h4>
+    <div class="mission-input">
+        
+        <input type="checkbox" id="mission1-checkbox" onchange="toggleMissionStatus(1)">
+        <input type="text" id="mission1" oninput="updateMissionList()">
+    </div>
+    <br><h4>오늘의 미션 2</h4>
+    <div class="mission-input">
+        <input type="checkbox" id="mission2-checkbox" onchange="toggleMissionStatus(2)">
+        <input type="text" id="mission2" oninput="updateMissionList()">
+    </div>
+    <br><h4>오늘의 미션 3</h4>
+    <div class="mission-input">
+        <input type="checkbox" id="mission3-checkbox" onchange="toggleMissionStatus(3)">
+        <input type="text" id="mission3" oninput="updateMissionList()">
+    </div>
+</div>
+
+<button onclick="addRow()" style="margin-top: 20px;">새 줄 추가</button>
+
+<table id="gant-chart">
+    <thead>
+        <tr>
+            <th>시간</th>
+            <th>작업명</th>
+            <th>목표 및 활동</th>
+            <th>작업 현황</th>
+            <th>중요도</th>
+            <th>긴급도</th>
+            <th>카운트다운</th>
+            <th>누적 시간</th>
+            <th>삭제</th> <!-- 삭제 버튼 추가 -->
+        </tr>
+    </thead>
+    <tbody>
+        <!-- 초기 행 -->
+        <tr class="status-not-started" draggable="true" ondragstart="dragStart(event)" ondragover="dragOver(event)" ondrop="drop(event)">
+            <td><input type="text" value="6:30 - 7:00 AM"></td>
+            <td><input type="text" value="기상 및 스트레칭"></td>
+            <td><input type="text" value="기상, 간단한 스트레칭"></td>
+            <td>
+                <select onchange="updateStatus(this)">
+                    <option class="not-started" value="not-started" selected>미완</option>
+                    <option class="in-progress" value="in-progress">작업 중</option>
+                    <option class="complete" value="complete">완료</option>
+                </select>
+            </td>
+            <td>
+                <select>
+                    <option value="1">1 (중요도 낮음)</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5 (중요도 높음)</option>
+                </select>
+            </td>
+            <td>
+                <select>
+                    <option value="1">1 (긴급도 낮음)</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5 (긴급도 높음)</option>
+                </select>
+            </td>
+            <td>
+                <span class="timer" data-time="1200">20:00</span>
+                <div class="time-control-buttons">
+                    <button onclick="adjustTime(this, 300)">+5분</button>
+                    <button onclick="adjustTime(this, -300)">-5분</button>
+                </div>
+                <button onclick="startTimer(this)">시작</button>
+                <button onclick="pauseTimer(this)">일시 정지</button>
+            </td>
+            <td class="elapsed-time">00:00:00</td>
+            <td><button onclick="deleteRow(this)">삭제</button></td>
+        </tr>
+    </tbody>
+</table>
+
+<!-- Floating Mission List -->
+<div class="floating-mission-list" id="mission-list">
+    <h3>오늘의 미션</h3>
+    <p id="mission1-display">미션 1: </p>
+    <p id="mission2-display">미션 2: </p>
+    <p id="mission3-display">미션 3: </p>
+</div>
+
+<script>
+    let intervals = {};  // Store intervals for each timer
+
+
+    window.onload = function() {
+        restoreMissionStatus(1);
+        restoreMissionStatus(2);
+        restoreMissionStatus(3);
+        updateMissionList();
+    };
+
+    // 미션 체크박스 상태에 따른 취소선 토글 기능
+    function toggleMissionStatus(missionNumber) {
+        const checkbox = document.getElementById(`mission${missionNumber}-checkbox`);
+        const missionText = document.getElementById(`mission${missionNumber}`);
+        if (checkbox.checked) {
+            missionText.classList.add('crossed-out');
+        } else {
+            missionText.classList.remove('crossed-out');
+        }
+        // 상태 저장
+        localStorage.setItem(`mission${missionNumber}-checked`, checkbox.checked);
+        updateMissionList(); // 업데이트 함수 호출
+    }
+
+    // 미션 상태 복원
+    function restoreMissionStatus(missionNumber) {
+        const checkbox = document.getElementById(`mission${missionNumber}-checkbox`);
+        const checked = localStorage.getItem(`mission${missionNumber}-checked`) === 'true';
+        checkbox.checked = checked;
+        const missionText = document.getElementById(`mission${missionNumber}`);
+        if (checked) {
+            missionText.classList.add('crossed-out');
+        } else {
+            missionText.classList.remove('crossed-out');
+        }
+    }
+
+    // 미션 목록 업데이트
+    function updateMissionList() {
+        document.getElementById('mission1-display').innerText = `미션 1: ${document.getElementById('mission1').value}`;
+        document.getElementById('mission2-display').innerText = `미션 2: ${document.getElementById('mission2').value}`;
+        document.getElementById('mission3-display').innerText = `미션 3: ${document.getElementById('mission3').value}`;
+    }
+
+      // 미션 체크박스 상태에 따른 취소선 토글 기능
+      function toggleMissionStatus(missionNumber) {
+        const checkbox = document.getElementById(`mission${missionNumber}-checkbox`);
+        const missionText = document.getElementById(`mission${missionNumber}`);
+        if (checkbox.checked) {
+            missionText.classList.add('crossed-out');
+        } else {
+            missionText.classList.remove('crossed-out');
+        }
+        updateMissionList(); // 업데이트 함수 호출
+    }
+
+    // 미션 목록 업데이트
+    function updateMissionList() {
+        const mission1 = document.getElementById('mission1');
+        const mission2 = document.getElementById('mission2');
+        const mission3 = document.getElementById('mission3');
+
+        document.getElementById('mission1-display').textContent = `미션 1: ${mission1.value}`;
+        document.getElementById('mission2-display').textContent = `미션 2: ${mission2.value}`;
+        document.getElementById('mission3-display').textContent = `미션 3: ${mission3.value}`;
+    }
+
+
+    // 카운트다운 시작 버튼 기능
+    function startTimer(button) {
+        const row = button.parentNode.parentNode;
+        const timerElement = row.querySelector(".timer");
+        const elapsedTimeElement = row.querySelector(".elapsed-time");
+        let timeRemaining = parseInt(timerElement.getAttribute("data-time"));
+
+        // 이미 타이머가 실행 중이면 중복 실행 방지
+        if (intervals[row.rowIndex]) {
+            return; // 이미 타이머가 실행 중이면 실행하지 않음
+        }
+
+        intervals[row.rowIndex] = setInterval(() => {
+            if (timeRemaining > 0) {
+                timeRemaining--;
+                timerElement.setAttribute("data-time", timeRemaining);
+                timerElement.innerText = formatTime(timeRemaining);
+                elapsedTimeElement.innerText = formatElapsedTime(timeRemaining);
+            } else {
+                clearInterval(intervals[row.rowIndex]);
+                delete intervals[row.rowIndex];  // 타이머 종료 후 삭제
+            }
+        }, 1000);
+    }
+
+    // 일시 정지 버튼 기능
+    function pauseTimer(button) {
+        const row = button.parentNode.parentNode;
+        if (intervals[row.rowIndex]) {
+            clearInterval(intervals[row.rowIndex]);
+            delete intervals[row.rowIndex];
+        }
+    }
+
+    // 시간 형식 (mm:ss)
+    function formatTime(seconds) {
+        const minutes = Math.floor(seconds / 60);
+        const remainingSeconds = seconds % 60;
+        return `${String(minutes).padStart(2, '0')}:${String(remainingSeconds).padStart(2, '0')}`;
+    }
+
+    // 누적 시간 형식 (HH:mm:ss)
+    function formatElapsedTime(totalSeconds) {
+        const hours = Math.floor(totalSeconds / 3600);
+        const minutes = Math.floor((totalSeconds % 3600) / 60);
+        const seconds = totalSeconds % 60;
+        return `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+    }
+
+
+     // 5분 조정 버튼
+     function adjustTime(button, change) {
+        const row = button.parentNode.parentNode;
+        const timerElement = row.querySelector(".timer");
+        let time = parseInt(timerElement.getAttribute("data-time"));
+        time += change;
+        if (time < 0) time = 0;
+        timerElement.setAttribute("data-time", time);
+        timerElement.innerText = formatTime(time);
+    }
+
+
+
+  // 행 삭제 기능
+  function deleteRow(button) {
+        const row = button.parentNode.parentNode;
+        row.remove();
+    }
+
+    // 작업 현황 업데이트 시 색상 변경
+function updateStatus(selectElement) {
+    const row = selectElement.parentNode.parentNode;
+    const status = selectElement.value;
+
+    // 기존 상태 클래스 제거
+    row.classList.remove("status-not-started", "status-in-progress", "status-complete");
+
+    // 새로운 상태에 맞는 클래스 추가
+    if (status === "not-started") {
+        row.classList.add("status-not-started");
+    } else if (status === "in-progress") {
+        row.classList.add("status-in-progress");
+    } else if (status === "complete") {
+        row.classList.add("status-complete");
+    }
+}
+
+
+
+    // 새로운 행 추가
+    function addRow() {
+            const table = document.getElementById("gant-chart").getElementsByTagName('tbody')[0];
+            const newRow = table.insertRow();
+            newRow.classList.add("status-not-started");
+            newRow.setAttribute('draggable', 'true');
+            newRow.setAttribute('ondragstart', 'dragStart(event)');
+            newRow.setAttribute('ondragover', 'dragOver(event)');
+            newRow.setAttribute('ondrop', 'drop(event)');
+            
+            newRow.innerHTML = `
+                <td><input type="text" value="시간 입력"></td>
+                <td><input type="text" value="작업명 입력"></td>
+                <td><input type="text" value="목표 및 활동 입력"></td>
+                <td>
+                    <select onchange="updateStatus(this)">
+                        <option value="not-started" selected>미완</option>
+                        <option value="in-progress">작업 중</option>
+                        <option value="complete">완료</option>
+                    </select>
+                </td>
+                <td>
+                    <select>
+                        <option value="1">1 (중요도 낮음)</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                        <option value="5">5 (중요도 높음)</option>
+                    </select>
+                </td>
+                <td>
+                    <select>
+                        <option value="1">1 (긴급도 낮음)</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                        <option value="5">5 (긴급도 높음)</option>
+                    </select>
+                </td>
+                <td>
+                    <span class="timer" data-time="1200">20:00</span>
+                    <div class="time-control-buttons">
+                        <button onclick="adjustTime(this, 300)">+5분</button>
+                        <button onclick="adjustTime(this, -300)">-5분</button>
+                    </div>
+                    <button onclick="startTimer(this)">시작</button>
+                    <button onclick="pauseTimer(this)">일시 정지</button>
+                </td>
+                <td class="elapsed-time">00:00:00</td>
+                <td><button onclick="deleteRow(this)">삭제</button></td>
+            `;
+    }
+
+    // 드래그 시작 처리
+    function dragStart(event) {
+        event.dataTransfer.setData('text/plain', event.target.rowIndex);
+    }
+
+    // 드래그 오버 처리
+    function dragOver(event) {
+        event.preventDefault();
+    }
+        // 드래그 후 드롭 처리
+        function drop(event) {
+        event.preventDefault();
+        const draggedRowIndex = event.dataTransfer.getData('text/plain');
+        const targetRow = event.target.closest('tr');
+        const draggedRow = document.getElementById('gant-chart').rows[draggedRowIndex];
+        
+        if (targetRow && draggedRow !== targetRow) {
+            targetRow.parentNode.insertBefore(draggedRow, targetRow.nextSibling);
+        }
+    }
+    
+
+    function saveData() {
+    const gantChartData = [];
+    const rows = document.getElementById("gant-chart").getElementsByTagName("tbody")[0].rows;
+    for (let i = 0; i < rows.length; i++) {
+        const row = rows[i];
+        gantChartData.push({
+            time: row.cells[0].querySelector("input").value,
+            task: row.cells[1].querySelector("input").value,
+            goal: row.cells[2].querySelector("input").value,
+            status: row.cells[3].querySelector("select").value,
+            importance: row.cells[4].querySelector("select").value,
+            urgency: row.cells[5].querySelector("select").value,
+            timer: row.cells[6].querySelector(".timer").getAttribute("data-time"),
+            elapsedTime: row.cells[7].innerText
+        });
+    }
+    localStorage.setItem("gantChartData", JSON.stringify(gantChartData));
+
+    // Save mission data including checkbox state and crossed-out state
+    const missionData = {
+        mission1: {
+            value: document.getElementById("mission1").value,
+            checked: document.getElementById("mission1-checkbox").checked,
+            crossedOut: document.getElementById("mission1-checkbox").classList.contains('crossed-out')
+        },
+        mission2: {
+            value: document.getElementById("mission2").value,
+            checked: document.getElementById("mission2-checkbox").checked,
+            crossedOut: document.getElementById("mission2-checkbox").classList.contains('crossed-out')
+        },
+        mission3: {
+            value: document.getElementById("mission3").value,
+            checked: document.getElementById("mission3-checkbox").checked,
+            crossedOut: document.getElementById("mission3-checkbox").classList.contains('crossed-out')
+        }
+    };
+    localStorage.setItem("missionData", JSON.stringify(missionData));
+}
+
+
+
+  // Load data and apply saved colors based on status
+  function loadData() {
+    const savedGantChartData = localStorage.getItem("gantChartData");
+    if (savedGantChartData) {
+        const gantChartData = JSON.parse(savedGantChartData);
+        const table = document.getElementById("gant-chart").getElementsByTagName("tbody")[0];
+        
+        // Remove the first row if it's a default example
+        if (gantChartData.length > 0) {
+            const firstRow = table.querySelector('tr');
+            if (firstRow) {
+                firstRow.remove();
+            }
+        }
+
+        gantChartData.forEach((data) => {
+            const row = table.insertRow();
+            row.setAttribute('draggable', 'true');
+            row.setAttribute('ondragstart', 'dragStart(event)');
+            row.setAttribute('ondragover', 'dragOver(event)');
+            row.setAttribute('ondrop', 'drop(event)');
+
+            row.innerHTML = `
+                <td><input type="text" value="${data.time}"></td>
+                <td><input type="text" value="${data.task}"></td>
+                <td><input type="text" value="${data.goal}"></td>
+                <td>
+                    <select onchange="updateStatus(this)">
+                        <option class="not-started" value="not-started"${data.status === "not-started" ? " selected" : ""}>미완</option>
+                        <option class="in-progress" value="in-progress"${data.status === "in-progress" ? " selected" : ""}>작업 중</option>
+                        <option class="complete" value="complete"${data.status === "complete" ? " selected" : ""}>완료</option>
+                    </select>
+                </td>
+                <td>
+                    <select>
+                        <option value="1"${data.importance === "1" ? " selected" : ""}>1 (중요도 낮음)</option>
+                        <option value="2"${data.importance === "2" ? " selected" : ""}>2</option>
+                        <option value="3"${data.importance === "3" ? " selected" : ""}>3</option>
+                        <option value="4"${data.importance === "4" ? " selected" : ""}>4</option>
+                        <option value="5"${data.importance === "5" ? " selected" : ""}>5 (중요도 높음)</option>
+                    </select>
+                </td>
+                <td>
+                    <select>
+                        <option value="1"${data.urgency === "1" ? " selected" : ""}>1 (긴급도 낮음)</option>
+                        <option value="2"${data.urgency === "2" ? " selected" : ""}>2</option>
+                        <option value="3"${data.urgency === "3" ? " selected" : ""}>3</option>
+                        <option value="4"${data.urgency === "4" ? " selected" : ""}>4</option>
+                        <option value="5"${data.urgency === "5" ? " selected" : ""}>5 (긴급도 높음)</option>
+                    </select>
+                </td>
+                <td>
+                    <span class="timer" data-time="${data.timer}">${formatTime(data.timer)}</span>
+                    <div class="time-control-buttons">
+                        <button onclick="adjustTime(this, 300)">+5분</button>
+                        <button onclick="adjustTime(this, -300)">-5분</button>
+                    </div>
+                    <button onclick="startTimer(this)">시작</button>
+                    <button onclick="pauseTimer(this)">일시 정지</button>
+                </td>
+                <td class="elapsed-time">${data.elapsedTime}</td>
+                <td><button onclick="deleteRow(this)">삭제</button></td>
+            `;
+            applyStatusColor(row, data.status);
+        });
+    }
+
+    // Load mission data including checkbox state and crossed-out state
+    const savedMissionData = localStorage.getItem("missionData");
+    if (savedMissionData) {
+        const missionData = JSON.parse(savedMissionData);
+        document.getElementById("mission1").value = missionData.mission1.value || '';
+        document.getElementById("mission2").value = missionData.mission2.value || '';
+        document.getElementById("mission3").value = missionData.mission3.value || '';
+
+        // Set checkbox states and crossed-out state
+        const mission1Checkbox = document.getElementById("mission1-checkbox");
+        const mission2Checkbox = document.getElementById("mission2-checkbox");
+        const mission3Checkbox = document.getElementById("mission3-checkbox");
+
+        mission1Checkbox.checked = missionData.mission1.checked;
+        mission2Checkbox.checked = missionData.mission2.checked;
+        mission3Checkbox.checked = missionData.mission3.checked;
+
+        if (missionData.mission1.crossedOut) {
+            mission1Checkbox.classList.add('crossed-out');
+        }
+        if (missionData.mission2.crossedOut) {
+            mission2Checkbox.classList.add('crossed-out');
+        }
+        if (missionData.mission3.crossedOut) {
+            mission3Checkbox.classList.add('crossed-out');
+        }
+
+        updateMissionList();
+    }
+}
+
+
+
+// Apply color based on status
+function applyStatusColor(row, status) {
+    row.classList.remove("status-not-started", "status-in-progress", "status-complete");
+
+    if (status === "not-started") {
+        row.classList.add("status-not-started");
+    } else if (status === "in-progress") {
+        row.classList.add("status-in-progress");
+    } else if (status === "complete") {
+        row.classList.add("status-complete");
+    }
+}
+
+ // 드래그 시작 처리
+    function dragStart(event) {
+        event.dataTransfer.setData('text/plain', event.target.rowIndex);
+    }
+
+    // 드래그 오버 처리
+    function dragOver(event) {
+        event.preventDefault();
+    }
+
+    // 드래그 후 드롭 처리
+    function drop(event) {
+        event.preventDefault();
+        const draggedRowIndex = event.dataTransfer.getData('text/plain');
+        const targetRow = event.target.closest('tr');
+        const draggedRow = document.getElementById('gant-chart').rows[draggedRowIndex];
+        
+        if (targetRow && draggedRow !== targetRow) {
+            targetRow.parentNode.insertBefore(draggedRow, targetRow.nextSibling);
+        }
+    }
+
+    // 드래그 후 드롭 처리
+    function drop(event) {
+        event.preventDefault();
+        const draggedRowIndex = event.dataTransfer.getData('text/plain');
+        const targetRow = event.target.closest('tr');
+        const draggedRow = document.getElementById('gant-chart').rows[draggedRowIndex];
+        
+        if (targetRow && draggedRow !== targetRow) {
+            targetRow.parentNode.insertBefore(draggedRow, targetRow.nextSibling);
+        }
+    }
+    // 미션 상태 업데이트
+    function toggleMissionStatus(missionIndex) {
+        const missionInput = document.getElementById(`mission${missionIndex}`);
+        const missionDisplay = document.getElementById(`mission${missionIndex}-display`);
+        if (document.getElementById(`mission${missionIndex}-checkbox`).checked) {
+            missionDisplay.classList.add('completed-mission');
+        } else {
+            missionDisplay.classList.remove('completed-mission');
+        }
+    }
+
+    // 미션 목록 갱신
+    function updateMissionList() {
+        document.getElementById("mission1-display").innerText = `미션 1: ${document.getElementById("mission1").value}`;
+        document.getElementById("mission2-display").innerText = `미션 2: ${document.getElementById("mission2").value}`;
+        document.getElementById("mission3-display").innerText = `미션 3: ${document.getElementById("mission3").value}`;
+    }
+
+    window.onload = function() {
+        loadData();
+    };
+
+    window.onbeforeunload = saveData; // 페이지가 새로 고침되거나 닫힐 때 저장
+</script>
+
+</body>
+</html>

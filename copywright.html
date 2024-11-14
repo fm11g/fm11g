@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>카피라이팅 연습</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+        .floating-menu {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background-color: #333;
+            color: white;
+            padding: 15px;
+            z-index: 1000;
+            text-align: center;
+        }
+        .section {
+            margin-top: 100px; /* 플로팅 메뉴 공간 확보 */
+            margin-bottom: 30px;
+        }
+        h2 {
+            color: #333;
+        }
+        .timer {
+            font-size: 24px;
+            font-weight: bold;
+            color: red;
+            margin: 10px 0;
+        }
+        textarea {
+            width: 100%;
+            height: 150px;
+            margin-top: 10px;
+            padding: 10px;
+            font-size: 16px;
+        }
+        button {
+            padding: 10px;
+            font-size: 16px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+    <!-- 플로팅 메뉴 -->
+    <div class="floating-menu">
+        <span><strong>고객 타겟:</strong> <span id="customerTargetDisplay">[여기에 고객 타겟을 입력하세요]</span></span><br><br>
+        <span><strong>상품의 특장점:</strong> <span id="productFeatureDisplay">[여기에 상품의 특장점을 입력하세요]</span></span>
+    </div>
+
+       <!-- 고객 타겟과 특장점 입력 -->
+       <div class="section">
+        <h2>고객 타겟과 상품 특장점 입력</h2>
+        <label for="customerTarget">고객 타겟:</label>
+        <input type="text" id="customerTarget" placeholder="고객 타겟을 입력하세요" oninput="updateFloatingMenu()"><br><br>
+        
+        <label for="productFeature">상품 특장점:</label>
+        <input type="text" id="productFeature" placeholder="상품의 특장점을 입력하세요" oninput="updateFloatingMenu()">
+    </div>
+
+    <h1>카피라이팅 연습</h1>
+
+    <!-- Section 1 -->
+    <div class="section">
+        <h2>1. 헤드라인: 주목을 끌기 (AIDA - Attention, SPIN - Situation)</h2>
+        <p>고객이 이 제목을 읽고 무엇을 느낄 것인가? 이 제목이 고객의 미친듯한 현재 상황을 어떻게 반영할 수 있을까?</p>
+        <p><strong>질문:</strong> "현재 고객이 직면하고 있는 고통스런 상황을 어떻게 가장 강렬하게 표현할 수 있을까?"</p>
+        <div class="timer" id="timer1">10:00</div>
+        <textarea id="section1" placeholder="여기에 카피를 작성하세요..."></textarea>
+        <button onclick="startTimer('timer1', 'section1')">타이머 시작</button>
+    </div>
+
+    <!-- Section 2 -->
+    <div class="section">
+        <h2>2. 문제 인식: 고객의 문제 제시 (PASONA - Problem, SPIN - Problem)</h2>
+        <p>고객이 겪고 있는 문제는 무엇인가? 이 문제를 해결하지 않으면 고객에게 어떤 위험이 있을까?</p>
+        <p><strong>질문:</strong> "이 문제로 인해 고객이 느끼는 불편함은 무엇일까?"</p>
+        <div class="timer" id="timer2">10:00</div>
+        <textarea id="section2" placeholder="여기에 카피를 작성하세요..."></textarea>
+        <button onclick="startTimer('timer2', 'section2')">타이머 시작</button>
+    </div>
+
+    <!-- Section 3 -->
+    <div class="section">
+        <h2>3. 감정적 공감: 고객의 감정 자극 (PASONA - Agitation, SPIN - Implication)</h2>
+        <p>이 문제로 고객이 어떤 감정을 느낄 수 있을까? 문제를 해결하지 않았을 때의 부정적인 결과는 무엇인가?</p>
+        <p><strong>질문:</strong> "이 문제를 해결하지 않으면 어떤 일이 일어날지 고객이 이해할 수 있게 전달할 수 있을까?"</p>
+        <div class="timer" id="timer3">10:00</div>
+        <textarea id="section3" placeholder="여기에 카피를 작성하세요..."></textarea>
+        <button onclick="startTimer('timer3', 'section3')">타이머 시작</button>
+    </div>
+
+    <!-- Section 4 -->
+    <div class="section">
+        <h2>4. 해결책 소개: 문제 해결 서비스 제시 (PASONA - Solution, SPIN - Need-Payoff)</h2>
+        <p>내 서비스가 고객의 문제를 어떻게 해결할 수 있을까? 이 해결책이 고객에게 어떤 긍정적인 변화를 가져올 수 있을까?</p>
+        <p><strong>질문:</strong> "이 해결책이 고객에게 가져올 변화는 무엇인가?"</p>
+        <div class="timer" id="timer4">10:00</div>
+        <textarea id="section4" placeholder="여기에 카피를 작성하세요..."></textarea>
+        <button onclick="startTimer('timer4', 'section4')">타이머 시작</button>
+    </div>
+
+    <!-- Section 5 -->
+    <div class="section">
+        <h2>5. 신뢰 구축: 신뢰할 수 있는 정보 제공 (AIDA - Credibility)</h2>
+        <p>서비스나 제품의 신뢰를 어떻게 구축할 수 있을까? 구체적인 성공 사례나 데이터를 어떻게 제시할 수 있을까?</p>
+        <p><strong>질문:</strong> "고객이 나의 서비스를 신뢰할 수 있도록 하기 위한 구체적인 증거는 무엇인가?"</p>
+        <div class="timer" id="timer5">10:00</div>
+        <textarea id="section5" placeholder="여기에 카피를 작성하세요..."></textarea>
+        <button onclick="startTimer('timer5', 'section5')">타이머 시작</button>
+    </div>
+
+    <!-- Section 6 -->
+    <div class="section">
+        <h2>6. 사회적 증거: 추천사나 후기 제시 (AIDA - Social Proof)</h2>
+        <p>다른 고객들이 이 서비스를 어떻게 평가했는가? 추천사나 후기에서 신뢰를 얻을 수 있는 부분은 무엇인가?</p>
+        <p><strong>질문:</strong> "이 서비스가 제공하는 효과를 다른 고객의 목소리로 어떻게 전달할 수 있을까?"</p>
+        <div class="timer" id="timer6">10:00</div>
+        <textarea id="section6" placeholder="여기에 카피를 작성하세요..."></textarea>
+        <button onclick="startTimer('timer6', 'section6')">타이머 시작</button>
+    </div>
+
+    <!-- Section 7 -->
+    <div class="section">
+        <h2>7. 이점 강조: 고객에게 주는 혜택 강조 (AIDA - Desire)</h2>
+        <p>고객이 얻을 수 있는 가장 큰 혜택은 무엇인가? 이 혜택을 어떻게 간결하고 강렬하게 전달할 수 있을까?</p>
+        <p><strong>질문:</strong> "이 제품이나 서비스가 고객에게 주는 최고의 이점은 무엇인가?"</p>
+        <div class="timer" id="timer7">10:00</div>
+        <textarea id="section7" placeholder="여기에 카피를 작성하세요..."></textarea>
+        <button onclick="startTimer('timer7', 'section7')">타이머 시작</button>
+    </div>
+
+    <!-- Section 8 -->
+    <div class="section">
+        <h2>8. 상세한 설명: 서비스 작동 방식 설명 (PASONA - Solution)</h2>
+        <p>서비스나 제품이 어떻게 작동하는지 간단히 설명할 수 있는 방법은 무엇인가? 고객이 쉽게 이해할 수 있도록 핵심적인 요소는 무엇인가?</p>
+        <p><strong>질문:</strong> "서비스의 작동 원리를 고객이 쉽게 이해할 수 있도록 어떻게 설명할 수 있을까?"</p>
+        <div class="timer" id="timer8">10:00</div>
+        <textarea id="section8" placeholder="여기에 카피를 작성하세요..."></textarea>
+        <button onclick="startTimer('timer8', 'section8')">타이머 시작</button>
+    </div>
+
+    <!-- Section 9 -->
+    <div class="section">
+        <h2>9. 위험 최소화: 리스크 해소 방법 제시 (AIDA - Risk Reversal)</h2>
+        <p>고객이 느낄 수 있는 리스크는 무엇인가? 리스크를 해소하기 위한 보증이나 정책을 어떻게 제시할 수 있을까?</p>
+        <p><strong>질문:</strong> "고객이 걱정하는 리스크를 어떻게 최소화하고, 해소할 수 있을까?"</p>
+        <div class="timer" id="timer9">10:00</div>
+        <textarea id="section9" placeholder="여기에 카피를 작성하세요..."></textarea>
+        <button onclick="startTimer('timer9', 'section9')">타이머 시작</button>
+    </div>
+
+       <!-- Section 10 -->
+       <div class="section">
+        <h2>10. 혜택 리스트: 주요 이점 요약 (AIDA - Desire)</h2>
+        <p>고객에게 제공되는 주요 이점을 어떻게 간결하게 나열할 수 있을까? 이 혜택을 쉽게 이해하고 기억할 수 있게 전달하려면 어떻게 해야 할까?</p>
+        <p><strong>질문:</strong> "가장 중요한 혜택을 간단하게 정리하여 고객에게 효과적으로 전달하려면?"</p>
+        <div class="timer" id="timer10">10:00</div>
+        <textarea id="section10" placeholder="여기에 카피를 작성하세요..."></textarea>
+        <button onclick="startTimer('timer10', 'section10')">타이머 시작</button>
+    </div>
+
+    <!-- Section 11 -->
+    <div class="section">
+        <h2>11. 긴급성 강조: 제한된 시간 강조 (AIDA - Action)</h2>
+        <p>고객이 지금 바로 행동하지 않으면 무엇을 놓칠 것인가? 긴급성을 어떻게 강조하여 고객이 즉시 행동하도록 유도할 수 있을까?</p>
+        <p><strong>질문:</strong> "제한된 시간의 혜택을 고객에게 어떻게 전달하여 즉각적인 반응을 유도할 수 있을까?"</p>
+        <div class="timer" id="timer11">10:00</div>
+        <textarea id="section11" placeholder="여기에 카피를 작성하세요..."></textarea>
+        <button onclick="startTimer('timer11', 'section11')">타이머 시작</button>
+    </div>
+
+    <!-- Section 12 -->
+    <div class="section">
+        <h2>12. 행동 촉구(CTA): 즉시 행동 유도 (AIDA - Action, SPIN - Need-Payoff)</h2>
+        <p>고객이 즉시 어떤 행동을 취하도록 유도할 수 있는 문구는 무엇인가? 행동을 촉구하는 문구를 어떻게 효과적으로 구성할 수 있을까?</p>
+        <p><strong>질문:</strong> "고객이 즉시 행동을 취하도록 유도할 수 있는 강력한 메시지는 무엇일까?"</p>
+        <div class="timer" id="timer12">10:00</div>
+        <textarea id="section12" placeholder="여기에 카피를 작성하세요..."></textarea>
+        <button onclick="startTimer('timer12', 'section12')">타이머 시작</button>
+    </div>
+
+    <!-- Section 13 -->
+    <div class="section">
+        <h2>13. FAQ 섹션: 의문 해소 (PASONA - Objections)</h2>
+        <p>고객이 자주 묻는 질문은 무엇인가? 고객의 의문을 어떻게 해소할 수 있는 구체적인 답변을 제시할 수 있을까?</p>
+        <p><strong>질문:</strong> "고객이 가질 수 있는 의문을 미리 예측하여 해결할 수 있는 방법은 무엇인가?"</p>
+        <div class="timer" id="timer13">10:00</div>
+        <textarea id="section13" placeholder="여기에 카피를 작성하세요..."></textarea>
+        <button onclick="startTimer('timer13', 'section13')">타이머 시작</button>
+    </div>
+
+    <!-- Section 14 -->
+    <div class="section">
+        <h2>14. 결론 강화: 혜택과 긴급성 재강조 (AIDA - Action)</h2>
+        <p>혜택과 긴급성을 어떻게 다시 강조하여 고객이 결정을 내리게 할 수 있을까? 결론을 어떻게 강력하게 마무리하여 즉시 행동을 유도할 수 있을까?</p>
+        <p><strong>질문:</strong> "고객이 결단을 내리도록 마지막으로 강하게 촉구할 수 있는 문구는?"</p>
+        <div class="timer" id="timer14">10:00</div>
+        <textarea id="section14" placeholder="여기에 카피를 작성하세요..."></textarea>
+        <button onclick="startTimer('timer14', 'section14')">타이머 시작</button>
+    </div>
+
+    <!-- Section 15 -->
+    <div class="section">
+        <h2>15. 최종 CTA: 결단 유도 (AIDA - Action)</h2>
+        <p>고객이 결정을 내리도록 유도할 수 있는 강력한 메시지는 무엇일까? 고객이 즉시 행동하도록 유도하는 문구는 무엇일까?</p>
+        <p><strong>질문:</strong> "고객이 바로 결단을 내리도록 유도할 수 있는 마지막 메시지는 무엇일까?"</p>
+        <div class="timer" id="timer15">10:00</div>
+        <textarea id="section15" placeholder="여기에 카피를 작성하세요..."></textarea>
+        <button onclick="startTimer('timer15', 'section15')">타이머 시작</button>
+    </div>
+
+    <script>
+        // 고객 타겟과 특장점 업데이트 함수
+        function updateFloatingMenu() {
+            const customerTarget = document.getElementById('customerTarget').value;
+            const productFeature = document.getElementById('productFeature').value;
+            document.getElementById('customerTargetDisplay').textContent = customerTarget || "[여기에 고객 타겟을 입력하세요]";
+            document.getElementById('productFeatureDisplay').textContent = productFeature || "[여기에 상품의 특장점을 입력하세요]";
+
+            // 고객 타겟과 특장점 값을 localStorage에 저장
+            localStorage.setItem('customerTarget', customerTarget);
+            localStorage.setItem('productFeature', productFeature);
+        }
+
+        // 데이터 복구 함수
+        function restoreData() {
+            // 고객 타겟과 특장점 복구
+            const savedCustomerTarget = localStorage.getItem('customerTarget');
+            const savedProductFeature = localStorage.getItem('productFeature');
+            if (savedCustomerTarget) document.getElementById('customerTarget').value = savedCustomerTarget;
+            if (savedProductFeature) document.getElementById('productFeature').value = savedProductFeature;
+            updateFloatingMenu();
+
+            // 각 섹션의 텍스트 영역 데이터 복구
+            for (let i = 1; i <= 15; i++) {
+                const savedText = localStorage.getItem(`section${i}`);
+                if (savedText) document.getElementById(`section${i}`).value = savedText;
+            }
+        }
+
+        // 텍스트 변경 시 데이터 저장 함수
+        function saveSectionData(sectionId) {
+            const text = document.getElementById(sectionId).value;
+            localStorage.setItem(sectionId, text);
+        }
+
+        // 타이머 시작 및 업데이트 함수
+        function startTimer(timerId, textareaId) {
+            let timeLeft = 600; // 10분 = 600초
+            const timerElement = document.getElementById(timerId);
+            const textarea = document.getElementById(textareaId);
+            const interval = setInterval(function() {
+                const minutes = Math.floor(timeLeft / 60);
+                const seconds = timeLeft % 60;
+                timerElement.textContent = `${minutes}:${seconds < 10 ? '0' + seconds : seconds}`;
+                timeLeft--;
+
+                // 타이머 종료 후
+                if (timeLeft < 0) {
+                    clearInterval(interval);
+                    textarea.disabled = true;
+                    alert('시간이 끝났습니다! 카피라이팅을 제출하세요.');
+                }
+            }, 1000);
+        }
+
+        // 페이지가 로드될 때 데이터 복구
+        window.onload = restoreData;
+
+        // 각 텍스트 영역에 입력 이벤트 리스너 추가
+        document.addEventListener("DOMContentLoaded", function() {
+            for (let i = 1; i <= 15; i++) {
+                const textarea = document.getElementById(`section${i}`);
+                textarea.addEventListener('input', () => saveSectionData(`section${i}`));
+            }
+        });
+    </script>
+</body>
+</html>
+
